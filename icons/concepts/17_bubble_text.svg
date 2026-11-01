@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.5" y2="1">
+      <stop offset="0" stop-color="#3f7ddd"/><stop offset="0.55" stop-color="#1d4aa0"/><stop offset="1" stop-color="#0a1c47"/>
+    </linearGradient>
+    <linearGradient id="bb" x1="0" y1="0" x2="0.4" y2="1">
+      <stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#e8f0ff"/>
+    </linearGradient>
+    <filter id="sh" x="-40%" y="-40%" width="180%" height="180%"><feDropShadow dx="0" dy="18" stdDeviation="20" flood-color="#04102b" flood-opacity="0.5"/></filter>
+    <clipPath id="sq"><rect x="100" y="100" width="824" height="824" rx="186"/></clipPath>
+  </defs>
+  <g clip-path="url(#sq)">
+    <rect x="100" y="100" width="824" height="824" fill="url(#bg)"/>
+    <ellipse cx="430" cy="270" rx="360" ry="230" fill="#ffffff" opacity="0.14"/>
+    <g filter="url(#sh)">
+      <path d="M296 262 L 728 262 C 768 262 796 290 796 330 L 796 590 C 796 630 768 658 728 658 L 520 658 L 442 742 L 444 658 L 296 658 C 256 658 228 630 228 590 L 228 330 C 228 290 256 262 296 262 Z" fill="url(#bb)"/>
+    </g>
+    <g stroke="#3f7ddd" stroke-linecap="round" opacity="0.85">
+      <path d="M300 352 L 632 352" stroke-width="18"/>
+      <path d="M300 420 L 720 420" stroke-width="18"/>
+      <path d="M300 488 L 540 488" stroke-width="18"/>
+      <path d="M300 556 L 452 556" stroke-width="18" opacity="0.5"/>
+    </g>
+    <g filter="url(#sh)">
+      <path d="M660 556 C 620 536, 566 528, 512 534 L 512 704 C 566 698, 620 706, 660 726 Z" fill="#ffffff" opacity="0.0"/>
+    </g>
+    <rect x="100" y="100" width="824" height="824" rx="186" fill="none" stroke="#ffffff" stroke-opacity="0.14" stroke-width="3"/>
+  </g>
+</svg>

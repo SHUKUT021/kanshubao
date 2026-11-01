@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.4" y2="1">
+      <stop offset="0" stop-color="#4f8cff"/><stop offset="1" stop-color="#2350c9"/>
+    </linearGradient>
+    <clipPath id="sq"><rect x="100" y="100" width="824" height="824" rx="186"/></clipPath>
+    <mask id="lenscut">
+      <rect x="0" y="0" width="1024" height="1024" fill="#fff"/>
+      <circle cx="512" cy="520" r="118" fill="#000"/>
+    </mask>
+  </defs>
+  <g clip-path="url(#sq)">
+    <rect x="100" y="100" width="824" height="824" fill="url(#bg)"/>
+    <g mask="url(#lenscut)">
+      <path d="M512 348 C 440 306, 344 288, 244 300 L 244 690 C 344 678, 440 696, 512 738 Z" fill="#ffffff"/>
+      <path d="M512 348 C 584 306, 680 288, 780 300 L 780 690 C 680 678, 584 696, 512 738 Z" fill="#ffffff"/>
+      <path d="M512 356 L 512 732" stroke="#3f6fc4" stroke-width="10"/>
+      <path d="M286 420 L 400 416 M286 478 L 392 474 M286 604 L 400 610" stroke="#5d8ee6" stroke-width="12" stroke-linecap="round" opacity="0.5"/>
+      <path d="M738 420 L 624 416 M738 478 L 632 474 M738 604 L 624 610" stroke="#5d8ee6" stroke-width="12" stroke-linecap="round" opacity="0.5"/>
+    </g>
+    <circle cx="512" cy="520" r="118" fill="none" stroke="#ffffff" stroke-width="26"/>
+    <circle cx="512" cy="520" r="74" fill="#123a8c" opacity="0.55"/>
+    <circle cx="512" cy="520" r="50" fill="#0b1a33"/>
+    <circle cx="480" cy="490" r="20" fill="#ffffff" opacity="0.9"/>
+    <circle cx="762" cy="742" r="62" fill="#3ddc97"/>
+    <path d="M734 744 L 754 764 L 792 724" fill="none" stroke="#04351f" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>

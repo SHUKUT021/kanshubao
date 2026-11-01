@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.5" y2="1">
+      <stop offset="0" stop-color="#2f5fd8"/><stop offset="0.55" stop-color="#16296b"/><stop offset="1" stop-color="#070c1e"/>
+    </linearGradient>
+    <linearGradient id="page" x1="0" y1="0" x2="0.4" y2="1">
+      <stop offset="0" stop-color="#ffffff"/><stop offset="0.6" stop-color="#eaf3ff"/><stop offset="1" stop-color="#b9cff0"/>
+    </linearGradient>
+    <radialGradient id="lens" cx="0.36" cy="0.3" r="0.85">
+      <stop offset="0" stop-color="#c9f2ff"/><stop offset="0.42" stop-color="#4f9ae8"/><stop offset="1" stop-color="#0a1e40"/>
+    </radialGradient>
+    <filter id="sh" x="-40%" y="-40%" width="180%" height="180%"><feDropShadow dx="0" dy="14" stdDeviation="18" flood-color="#000610" flood-opacity="0.55"/></filter>
+    <clipPath id="sq"><rect x="100" y="100" width="824" height="824" rx="186"/></clipPath>
+  </defs>
+  <g clip-path="url(#sq)">
+    <rect x="100" y="100" width="824" height="824" fill="url(#bg)"/>
+    <circle cx="560" cy="470" r="300" fill="#4f8cff" opacity="0.18"/>
+    <g stroke="#8fc0ff" fill="none" stroke-linecap="round" opacity="0.9">
+      <path d="M682 392 A 120 120 0 0 1 682 632" stroke-width="16"/>
+      <path d="M736 342 A 190 190 0 0 1 736 682" stroke-width="16" opacity="0.65"/>
+      <path d="M790 294 A 258 258 0 0 1 790 730" stroke-width="16" opacity="0.38"/>
+    </g>
+    <g filter="url(#sh)">
+      <path d="M556 400 C 500 366, 424 352, 348 362 L 348 700 C 424 690, 500 704, 556 742 Z" fill="url(#page)"/>
+      <path d="M556 400 C 604 372, 664 358, 716 360 L 716 700 C 664 696, 604 706, 556 742 Z" fill="url(#page)" opacity="0.9"/>
+    </g>
+    <path d="M556 406 L 556 736" stroke="#9fb8dc" stroke-width="7" opacity="0.55" stroke-linecap="round"/>
+    <g stroke="#7f9dc9" stroke-width="8" stroke-linecap="round" opacity="0.25">
+      <path d="M392 452 L 468 452"/><path d="M392 512 L 460 512"/><path d="M392 620 L 468 620"/>
+    </g>
+    <g filter="url(#sh)">
+      <circle cx="398" cy="556" r="82" fill="#0d1524"/>
+      <circle cx="398" cy="556" r="68" fill="url(#lens)"/>
+      <circle cx="398" cy="556" r="24" fill="#06101f"/>
+      <ellipse cx="376" cy="530" rx="20" ry="13" fill="#ffffff" opacity="0.75" transform="rotate(-32 376 530)"/>
+    </g>
+    <rect x="100" y="100" width="824" height="824" rx="186" fill="none" stroke="#ffffff" stroke-opacity="0.12" stroke-width="3"/>
+  </g>
+</svg>

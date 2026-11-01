@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.4" y2="1">
+      <stop offset="0" stop-color="#2a3b63"/><stop offset="0.6" stop-color="#111a2e"/><stop offset="1" stop-color="#070a12"/>
+    </linearGradient>
+    <radialGradient id="glass" cx="0.4" cy="0.28" r="0.9">
+      <stop offset="0" stop-color="#7fe0ff"/><stop offset="0.42" stop-color="#2f7fd4"/><stop offset="1" stop-color="#08162e"/>
+    </radialGradient>
+    <linearGradient id="ring" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#b4c6e4"/><stop offset="0.4" stop-color="#3a465e"/><stop offset="1" stop-color="#080d16"/>
+    </linearGradient>
+    <filter id="sh" x="-40%" y="-40%" width="180%" height="180%"><feDropShadow dx="0" dy="22" stdDeviation="26" flood-color="#00040c" flood-opacity="0.65"/></filter>
+    <clipPath id="sq"><rect x="100" y="100" width="824" height="824" rx="186"/></clipPath>
+  </defs>
+  <g clip-path="url(#sq)">
+    <rect x="100" y="100" width="824" height="824" fill="url(#bg)"/>
+    <circle cx="512" cy="492" r="330" fill="#4f8cff" opacity="0.18"/>
+    <g filter="url(#sh)">
+      <circle cx="512" cy="496" r="288" fill="url(#ring)"/>
+      <circle cx="512" cy="496" r="256" fill="#0a1220"/>
+      <circle cx="512" cy="496" r="234" fill="url(#glass)"/>
+      <path d="M512 262 A 234 234 0 0 1 746 496" fill="none" stroke="#ffffff" stroke-width="10" opacity="0.35" stroke-linecap="round"/>
+    </g>
+    <circle cx="512" cy="496" r="234" fill="#06182f" opacity="0.35"/>
+    <path d="M404 500 L 470 568 L 626 400" fill="none" stroke="#3ddc97" stroke-width="52" stroke-linecap="round" stroke-linejoin="round"/>
+    <rect x="100" y="100" width="824" height="824" rx="186" fill="none" stroke="#ffffff" stroke-opacity="0.12" stroke-width="3"/>
+  </g>
+</svg>

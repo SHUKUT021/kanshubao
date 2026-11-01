@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+<defs>
+<clipPath id="sq"><rect x="100" y="100" width="824" height="824" rx="186"/></clipPath>
+<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2f6fe0"/><stop offset="1" stop-color="#0b2a63"/></linearGradient>
+<linearGradient id="body" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#d7e3f6"/></linearGradient>
+<linearGradient id="page" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#e2ebfb"/></linearGradient>
+<filter id="sh" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="16" stdDeviation="18" flood-color="#000000" flood-opacity="0.28"/></filter>
+
+</defs>
+<g clip-path="url(#sq)">
+<rect x="100" y="100" width="824" height="824" fill="url(#bg)"/>
+<circle cx="470" cy="420" r="336" fill="#ffffff" opacity="0.07"/>
+<g filter="url(#sh)">
+<rect x="392" y="250" width="140" height="66" rx="26" fill="url(#body)"/>
+<rect x="238" y="300" width="548" height="394" rx="78" fill="url(#body)"/>
+</g>
+<rect x="306" y="332" width="84" height="22" rx="11" fill="#c2d1e8"/>
+<circle cx="702" cy="343" r="14" fill="#c2d1e8"/><rect x="380" y="378" width="264" height="264" rx="86" fill="#0a1220"/>
+<rect x="394" y="392" width="236" height="236" rx="72" fill="#14213a"/>
+
+<g stroke="#2dd4bf" stroke-width="9" stroke-linecap="round" opacity="0.95"><path d="M436 480 L 414 480"/><path d="M580 480 L 602 480"/><path d="M436 508 L 414 508"/><path d="M580 508 L 602 508"/><path d="M436 536 L 414 536"/><path d="M580 536 L 602 536"/><path d="M480 436 L 480 414"/><path d="M480 580 L 480 602"/><path d="M508 436 L 508 414"/><path d="M508 580 L 508 602"/><path d="M536 436 L 536 414"/><path d="M536 580 L 536 602"/></g>
+<rect x="436" y="436" width="144" height="144" rx="34" fill="#0c5f57" stroke="#2dd4bf" stroke-width="6"/>
+<rect x="474" y="474" width="68" height="68" rx="16" fill="#2dd4bf" opacity="0.9"/>
+<rect x="100" y="100" width="824" height="824" rx="186" fill="none" stroke="#ffffff" stroke-opacity="0.10" stroke-width="3"/>
+</g>
+</svg>

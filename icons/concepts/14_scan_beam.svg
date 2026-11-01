@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.4" y2="1">
+      <stop offset="0" stop-color="#16305e"/><stop offset="0.55" stop-color="#0b1a33"/><stop offset="1" stop-color="#050a14"/>
+    </linearGradient>
+    <linearGradient id="pg" x1="0" y1="0" x2="0.3" y2="1">
+      <stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#dce8fa"/>
+    </linearGradient>
+    <linearGradient id="beam" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5fe3ff" stop-opacity="0"/><stop offset="0.5" stop-color="#5fe3ff" stop-opacity="0.55"/><stop offset="1" stop-color="#5fe3ff" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="sh" x="-40%" y="-40%" width="180%" height="180%"><feDropShadow dx="0" dy="16" stdDeviation="18" flood-color="#00040f" flood-opacity="0.6"/></filter>
+    <clipPath id="page"><rect x="274" y="286" width="476" height="452" rx="16"/></clipPath>
+    <clipPath id="sq"><rect x="100" y="100" width="824" height="824" rx="186"/></clipPath>
+  </defs>
+  <g clip-path="url(#sq)">
+    <rect x="100" y="100" width="824" height="824" fill="url(#bg)"/>
+    <circle cx="512" cy="430" r="330" fill="#2f7fe8" opacity="0.14"/>
+    <g filter="url(#sh)"><rect x="274" y="286" width="476" height="452" rx="16" fill="url(#pg)"/></g>
+    <g clip-path="url(#page)">
+      <g stroke="#b9cde8" stroke-width="12" stroke-linecap="round" opacity="0.9">
+        <path d="M326 372 L 520 372"/><path d="M326 436 L 646 436"/><path d="M326 500 L 470 500"/><path d="M326 564 L 610 564"/><path d="M326 628 L 500 628"/><path d="M326 690 L 580 690"/>
+      </g>
+      <rect x="274" y="466" width="476" height="96" fill="url(#beam)"/>
+      <path d="M274 512 L 750 512" stroke="#7ff0ff" stroke-width="6" opacity="0.95"/>
+    </g>
+    <rect x="274" y="286" width="476" height="452" rx="16" fill="none" stroke="#ffffff" stroke-opacity="0.75" stroke-width="4"/>
+    <g stroke="#5fe3ff" stroke-width="12" stroke-linecap="round">
+      <path d="M232 350 L 232 250 L 332 250"/>
+      <path d="M692 250 L 792 250 L 792 350"/>
+      <path d="M792 674 L 792 774 L 692 774"/>
+      <path d="M332 774 L 232 774 L 232 674"/>
+    </g>
+    <g filter="url(#sh)">
+      <circle cx="746" cy="744" r="70" fill="#0b1322"/>
+      <circle cx="746" cy="744" r="62" fill="#3ddc97"/>
+      <path d="M714 746 L 737 769 L 780 722" fill="none" stroke="#053322" stroke-width="17" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+    <rect x="100" y="100" width="824" height="824" rx="186" fill="none" stroke="#ffffff" stroke-opacity="0.12" stroke-width="3"/>
+  </g>
+</svg>

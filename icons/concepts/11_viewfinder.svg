@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.45" y2="1">
+      <stop offset="0" stop-color="#2b56a8"/><stop offset="0.55" stop-color="#152a55"/><stop offset="1" stop-color="#070c18"/>
+    </linearGradient>
+    <linearGradient id="pg" x1="0" y1="0" x2="0.3" y2="1">
+      <stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#dbe7fa"/>
+    </linearGradient>
+    <filter id="sh" x="-40%" y="-40%" width="180%" height="180%"><feDropShadow dx="0" dy="16" stdDeviation="18" flood-color="#00040f" flood-opacity="0.55"/></filter>
+    <clipPath id="sq"><rect x="100" y="100" width="824" height="824" rx="186"/></clipPath>
+  </defs>
+  <g clip-path="url(#sq)">
+    <rect x="100" y="100" width="824" height="824" fill="url(#bg)"/>
+    <circle cx="512" cy="360" r="300" fill="#4f8cff" opacity="0.16"/>
+    <g transform="rotate(-4 512 520)" filter="url(#sh)">
+      <rect x="292" y="318" width="440" height="404" rx="16" fill="url(#pg)"/>
+      <rect x="292" y="318" width="440" height="404" rx="16" fill="none" stroke="#ffffff" stroke-width="3"/>
+    </g>
+    <g transform="rotate(-4 512 520)" stroke="#a9c3e6" stroke-width="10" stroke-linecap="round" opacity="0.65">
+      <path d="M340 404 L 520 404"/><path d="M340 464 L 592 464"/><path d="M340 524 L 470 524"/><path d="M340 584 L 560 584"/>
+    </g>
+    <g stroke="#7fd3ff" stroke-width="16" stroke-linecap="round" fill="none">
+      <path d="M232 352 L 232 250 L 334 250"/>
+      <path d="M690 250 L 792 250 L 792 352"/>
+      <path d="M792 690 L 792 792 L 690 792"/>
+      <path d="M334 792 L 232 792 L 232 690"/>
+    </g>
+    <g filter="url(#sh)">
+      <circle cx="742" cy="742" r="72" fill="#0b1322"/>
+      <circle cx="742" cy="742" r="64" fill="#3ddc97"/>
+      <path d="M708 744 L 732 768 L 778 718" fill="none" stroke="#053322" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+    <rect x="100" y="100" width="824" height="824" rx="186" fill="none" stroke="#ffffff" stroke-opacity="0.12" stroke-width="3"/>
+  </g>
+</svg>

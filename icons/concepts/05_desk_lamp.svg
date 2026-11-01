@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.4" y2="1">
+      <stop offset="0" stop-color="#26304d"/><stop offset="0.6" stop-color="#141b2b"/><stop offset="1" stop-color="#080b12"/>
+    </linearGradient>
+    <radialGradient id="lamp" cx="0.5" cy="0.6" r="0.6">
+      <stop offset="0" stop-color="#ffd489" stop-opacity="0.95"/><stop offset="0.6" stop-color="#ffb648" stop-opacity="0.35"/><stop offset="1" stop-color="#ffb648" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="cone" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffd88a" stop-opacity="0.55"/><stop offset="1" stop-color="#ffd88a" stop-opacity="0.02"/>
+    </linearGradient>
+    <linearGradient id="page" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#c9d6e8"/>
+    </linearGradient>
+    <filter id="sh" x="-40%" y="-40%" width="180%" height="180%"><feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#000" flood-opacity="0.55"/></filter>
+    <clipPath id="sq"><rect x="100" y="100" width="824" height="824" rx="186"/></clipPath>
+  </defs>
+  <g clip-path="url(#sq)">
+    <rect x="100" y="100" width="824" height="824" fill="url(#bg)"/>
+    <circle cx="512" cy="620" r="330" fill="url(#lamp)" opacity="0.55"/>
+    <path d="M470 356 L 606 356 L 700 700 L 376 700 Z" fill="url(#cone)"/>
+    <ellipse cx="538" cy="690" rx="240" ry="70" fill="#ffd489" opacity="0.22"/>
+    <g stroke="#dbe6f7" stroke-width="26" stroke-linecap="round" fill="none">
+      <path d="M288 760 L 288 300 L 430 300"/>
+    </g>
+    <path d="M420 268 L 610 268 L 660 366 L 370 366 Z" fill="#e8eefb" filter="url(#sh)"/>
+    <path d="M370 366 L 660 366 L 646 392 L 384 392 Z" fill="#ffcf7a"/>
+    <g>
+      <circle cx="512" cy="316" r="26" fill="#16233d"/>
+      <circle cx="512" cy="316" r="18" fill="#0d1a30"/>
+      <circle cx="512" cy="316" r="14" fill="#63a4ff"/>
+      <circle cx="505" cy="309" r="5" fill="#ffffff" opacity="0.8"/>
+    </g>
+    <g filter="url(#sh)">
+      <path d="M512 596 C 456 570, 388 560, 320 568 L 320 726 C 388 718, 456 728, 512 758 Z" fill="url(#page)"/>
+      <path d="M512 596 C 568 570, 636 560, 704 568 L 704 726 C 636 718, 568 728, 512 758 Z" fill="url(#page)"/>
+      <path d="M512 604 L 512 752" stroke="#9fb2cc" stroke-width="7" opacity="0.6"/>
+    </g>
+    <rect x="100" y="100" width="824" height="824" rx="186" fill="none" stroke="#ffffff" stroke-opacity="0.12" stroke-width="3"/>
+  </g>
+</svg>

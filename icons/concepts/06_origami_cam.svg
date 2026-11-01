@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.5" y2="1">
+      <stop offset="0" stop-color="#0f7d74"/><stop offset="0.55" stop-color="#0a4a48"/><stop offset="1" stop-color="#04201f"/>
+    </linearGradient>
+    <linearGradient id="p1" x1="0" y1="0" x2="0.6" y2="1">
+      <stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#d8e6e4"/>
+    </linearGradient>
+    <linearGradient id="p2" x1="0" y1="0" x2="0.6" y2="1">
+      <stop offset="0" stop-color="#f2f8f7"/><stop offset="1" stop-color="#b7cdca"/>
+    </linearGradient>
+    <linearGradient id="p3" x1="0" y1="0" x2="0.6" y2="1">
+      <stop offset="0" stop-color="#dbe8e6"/><stop offset="1" stop-color="#93aeab"/>
+    </linearGradient>
+    <radialGradient id="glass" cx="0.35" cy="0.3" r="0.85">
+      <stop offset="0" stop-color="#b9f4e8"/><stop offset="0.45" stop-color="#31b39d"/><stop offset="1" stop-color="#053f38"/>
+    </radialGradient>
+    <filter id="sh" x="-40%" y="-40%" width="180%" height="180%"><feDropShadow dx="0" dy="18" stdDeviation="20" flood-color="#001512" flood-opacity="0.5"/></filter>
+    <clipPath id="sq"><rect x="100" y="100" width="824" height="824" rx="186"/></clipPath>
+  </defs>
+  <g clip-path="url(#sq)">
+    <rect x="100" y="100" width="824" height="824" fill="url(#bg)"/>
+    <circle cx="512" cy="470" r="320" fill="#16c3a6" opacity="0.16"/>
+    <g filter="url(#sh)">
+      <path d="M250 330 L 640 286 L 700 640 L 310 700 Z" fill="url(#p1)"/>
+      <path d="M640 286 L 800 380 L 700 640 L 640 286 Z" fill="url(#p3)"/>
+      <path d="M250 330 L 310 700 L 250 640 L 200 380 Z" fill="url(#p2)"/>
+      <path d="M640 286 L 560 372 L 700 640 Z" fill="url(#p2)" opacity="0.85"/>
+      <path d="M560 372 L 330 400 L 420 620 L 700 640 Z" fill="#ffffff" opacity="0.55"/>
+    </g>
+    <circle cx="486" cy="498" r="132" fill="#06332e"/>
+    <circle cx="486" cy="498" r="112" fill="url(#glass)"/>
+    <circle cx="486" cy="498" r="42" fill="#04211d"/>
+    <ellipse cx="444" cy="452" rx="34" ry="22" fill="#ffffff" opacity="0.7" transform="rotate(-32 444 452)"/>
+    <circle cx="486" cy="498" r="136" fill="none" stroke="#ffffff" stroke-width="6" opacity="0.85"/>
+    <rect x="100" y="100" width="824" height="824" rx="186" fill="none" stroke="#ffffff" stroke-opacity="0.12" stroke-width="3"/>
+  </g>
+</svg>

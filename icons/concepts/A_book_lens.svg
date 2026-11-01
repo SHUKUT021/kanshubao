@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.35" y2="1">
+      <stop offset="0" stop-color="#22305e"/>
+      <stop offset="0.55" stop-color="#101a33"/>
+      <stop offset="1" stop-color="#070a13"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.34" r="0.62">
+      <stop offset="0" stop-color="#4f8cff" stop-opacity="0.55"/>
+      <stop offset="0.62" stop-color="#4f8cff" stop-opacity="0.10"/>
+      <stop offset="1" stop-color="#4f8cff" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="pageL" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#c8dbff"/>
+    </linearGradient>
+    <linearGradient id="pageR" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f2f7ff"/>
+      <stop offset="1" stop-color="#b9d0fb"/>
+    </linearGradient>
+    <linearGradient id="ring" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#8fa9d6"/>
+      <stop offset="0.4" stop-color="#2a3654"/>
+      <stop offset="1" stop-color="#0a0f1d"/>
+    </linearGradient>
+    <radialGradient id="glass" cx="0.35" cy="0.3" r="0.85">
+      <stop offset="0" stop-color="#9fe6ff"/>
+      <stop offset="0.45" stop-color="#3d8ce8"/>
+      <stop offset="1" stop-color="#0d2450"/>
+    </radialGradient>
+    <linearGradient id="blade" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#8ec2ff" stop-opacity="0.95"/>
+      <stop offset="1" stop-color="#2a5aa8" stop-opacity="0.75"/>
+    </linearGradient>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="26"/>
+    </filter>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="18" stdDeviation="22" flood-color="#000814" flood-opacity="0.55"/>
+    </filter>
+    <clipPath id="squircle">
+      <rect x="100" y="100" width="824" height="824" rx="186"/>
+    </clipPath>
+  </defs>
+
+  <g clip-path="url(#squircle)">
+    <rect x="100" y="100" width="824" height="824" fill="url(#bg)"/>
+    <rect x="100" y="100" width="824" height="824" fill="url(#glow)"/>
+    <ellipse cx="512" cy="812" rx="270" ry="38" fill="#00030a" opacity="0.55" filter="url(#soft)"/>
+
+    <!-- open book -->
+    <g filter="url(#shadow)">
+      <path d="M512 402 C 438 366, 340 350, 236 362 L 236 726 C 340 714, 438 730, 512 772 Z" fill="url(#pageL)"/>
+      <path d="M512 402 C 586 366, 684 350, 788 362 L 788 726 C 684 714, 586 730, 512 772 Z" fill="url(#pageR)"/>
+    </g>
+    <path d="M512 402 C 438 366, 340 350, 236 362 L 236 726 C 340 714, 438 730, 512 772 Z" fill="none" stroke="#ffffff" stroke-opacity="0.85" stroke-width="4"/>
+    <path d="M512 402 C 586 366, 684 350, 788 362 L 788 726 C 684 714, 586 730, 512 772 Z" fill="none" stroke="#ffffff" stroke-opacity="0.85" stroke-width="4"/>
+    <path d="M512 410 L 512 764" stroke="#8ea9d8" stroke-width="10" stroke-linecap="round" opacity="0.6"/>
+
+    <!-- lens -->
+    <circle cx="512" cy="566" r="176" fill="#05080f" opacity="0.45" filter="url(#soft)"/>
+    <circle cx="512" cy="558" r="158" fill="url(#ring)"/>
+    <circle cx="512" cy="558" r="140" fill="#0a1222"/>
+    <circle cx="512" cy="558" r="126" fill="url(#glass)"/>
+    <g opacity="0.55">
+      <path d="M512 432 L 640 484 L 588 612 L 436 612 L 384 484 Z" fill="none" stroke="url(#blade)" stroke-width="10" stroke-linejoin="round"/>
+    </g>
+    <circle cx="512" cy="558" r="44" fill="#07101f" opacity="0.85"/>
+    <ellipse cx="462" cy="500" rx="46" ry="30" fill="#ffffff" opacity="0.55" transform="rotate(-32 462 500)"/>
+    <ellipse cx="560" cy="612" rx="20" ry="12" fill="#bfe9ff" opacity="0.4"/>
+
+    <!-- check -->
+    <g filter="url(#shadow)">
+      <circle cx="712" cy="676" r="66" fill="#3ddc97"/>
+      <path d="M678 676 L 702 700 L 748 650" fill="none" stroke="#06301f" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+
+    <rect x="100" y="100" width="824" height="824" rx="186" fill="none" stroke="#ffffff" stroke-opacity="0.10" stroke-width="3"/>
+  </g>
+</svg>

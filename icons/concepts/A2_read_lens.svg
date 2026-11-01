@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="bg" x1="0.12" y1="0" x2="0.5" y2="1">
+      <stop offset="0" stop-color="#2b4b96"/>
+      <stop offset="0.42" stop-color="#16274d"/>
+      <stop offset="1" stop-color="#070a13"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.30" r="0.66">
+      <stop offset="0" stop-color="#5b95ff" stop-opacity="0.50"/>
+      <stop offset="0.55" stop-color="#4f8cff" stop-opacity="0.12"/>
+      <stop offset="1" stop-color="#4f8cff" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="pageL" x1="0.1" y1="0" x2="0.9" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="0.55" stop-color="#eaf2ff"/>
+      <stop offset="1" stop-color="#c3d6f7"/>
+    </linearGradient>
+    <linearGradient id="pageR" x1="0.9" y1="0" x2="0.1" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="0.55" stop-color="#e4eeff"/>
+      <stop offset="1" stop-color="#b6ccef"/>
+    </linearGradient>
+    <linearGradient id="stackL" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#9fb6d8"/>
+      <stop offset="1" stop-color="#7b93ba"/>
+    </linearGradient>
+    <linearGradient id="ring" x1="0.15" y1="0" x2="0.85" y2="1">
+      <stop offset="0" stop-color="#a7bcdd"/>
+      <stop offset="0.35" stop-color="#38455f"/>
+      <stop offset="1" stop-color="#080d18"/>
+    </linearGradient>
+    <radialGradient id="glass" cx="0.36" cy="0.28" r="0.86">
+      <stop offset="0" stop-color="#b6efff"/>
+      <stop offset="0.38" stop-color="#4f9ae8"/>
+      <stop offset="1" stop-color="#0a1f42"/>
+    </radialGradient>
+    <linearGradient id="badge" x1="0" y1="0" x2="0.6" y2="1">
+      <stop offset="0" stop-color="#57e8a8"/>
+      <stop offset="1" stop-color="#26b87c"/>
+    </linearGradient>
+    <filter id="soft" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="24"/>
+    </filter>
+    <filter id="shadow" x="-40%" y="-40%" width="180%" height="180%">
+      <feDropShadow dx="0" dy="16" stdDeviation="20" flood-color="#000610" flood-opacity="0.55"/>
+    </filter>
+    <clipPath id="squircle"><rect x="100" y="100" width="824" height="824" rx="186"/></clipPath>
+  </defs>
+
+  <g clip-path="url(#squircle)">
+    <rect x="100" y="100" width="824" height="824" fill="url(#bg)"/>
+    <rect x="100" y="100" width="824" height="824" fill="url(#glow)"/>
+    <ellipse cx="512" cy="812" rx="258" ry="34" fill="#00030a" opacity="0.6" filter="url(#soft)"/>
+
+    <!-- page block thickness -->
+    <g filter="url(#shadow)">
+      <path d="M512 428 C 438 392, 340 376, 232 388 L 232 748 C 340 736, 438 752, 512 792 Z" fill="url(#stackL)"/>
+      <path d="M512 428 C 586 392, 684 376, 792 388 L 792 748 C 684 736, 586 752, 512 792 Z" fill="url(#stackL)"/>
+      <!-- pages -->
+      <path d="M512 416 C 438 380, 340 364, 232 376 L 232 736 C 340 724, 438 740, 512 780 Z" fill="url(#pageL)"/>
+      <path d="M512 416 C 586 380, 684 364, 792 376 L 792 736 C 684 724, 586 740, 512 780 Z" fill="url(#pageR)"/>
+    </g>
+
+    <!-- ruled lines -->
+    <g stroke="#7f9dc9" stroke-width="9" stroke-linecap="round" opacity="0.30">
+      <path d="M292 470 L 380 468"/><path d="M292 526 L 358 524"/><path d="M292 640 L 380 646"/>
+      <path d="M644 468 L 732 470"/><path d="M666 524 L 732 526"/><path d="M644 646 L 732 640"/>
+    </g>
+
+    <!-- bookmark ribbon -->
+    <path d="M700 384 L 754 388 L 752 520 L 727 500 L 700 516 Z" fill="#ffb648"/>
+    <path d="M700 384 L 754 388 L 753 404 L 700 400 Z" fill="#ffd489" opacity="0.9"/>
+
+    <!-- spine fold -->
+    <path d="M512 424 L 512 776" stroke="#8ea9d8" stroke-width="9" stroke-linecap="round" opacity="0.55"/>
+
+    <!-- lens -->
+    <circle cx="512" cy="574" r="164" fill="#00040c" opacity="0.45" filter="url(#soft)"/>
+    <circle cx="512" cy="566" r="150" fill="url(#ring)"/>
+    <circle cx="512" cy="566" r="132" fill="#0a1222"/>
+    <circle cx="512" cy="566" r="118" fill="url(#glass)"/>
+    <g opacity="0.55" stroke="#a9d4ff" stroke-width="9" stroke-linejoin="round" fill="none">
+      <path d="M512 458 L 626 506 L 578 620 L 446 620 L 398 506 Z"/>
+    </g>
+    <circle cx="512" cy="566" r="40" fill="#06101f" opacity="0.9"/>
+    <ellipse cx="470" cy="514" rx="40" ry="26" fill="#ffffff" opacity="0.62" transform="rotate(-34 470 514)"/>
+    <ellipse cx="556" cy="616" rx="17" ry="10" fill="#cdefff" opacity="0.42"/>
+
+    <!-- check badge -->
+    <g filter="url(#shadow)">
+      <circle cx="742" cy="746" r="74" fill="#0a1020" opacity="0.35"/>
+      <circle cx="742" cy="736" r="74" fill="url(#badge)"/>
+      <circle cx="742" cy="736" r="74" fill="none" stroke="#ffffff" stroke-opacity="0.5" stroke-width="4"/>
+      <path d="M706 738 L 730 762 L 778 710" fill="none" stroke="#053322" stroke-width="19" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+
+    <rect x="100" y="100" width="824" height="824" rx="186" fill="none" stroke="#ffffff" stroke-opacity="0.12" stroke-width="3"/>
+  </g>
+</svg>

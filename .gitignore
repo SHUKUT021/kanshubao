@@ -1,0 +1,13 @@
+# 含豆包 API Key，绝不入库
+config.json
+logs/
+shots/
+data/
+__pycache__/
+*.pyc
+.DS_Store
+cache/
+dist/
+.build_stamp
+*.app/
+tools/hidmon

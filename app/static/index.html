@@ -1,0 +1,972 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>看书宝 · Mac</title>
+<style>
+  :root{
+    --bg:#0f1115; --panel:#171a21; --panel2:#1e222b; --line:#2a2f3a;
+    --text:#e8ecf3; --dim:#94a0b4; --brand:#4f8cff; --ok:#3ddc97; --bad:#ff6b6b; --warn:#ffc857;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font:14px/1.55 -apple-system,BlinkMacSystemFont,"PingFang SC","Helvetica Neue",sans-serif}
+  header{display:flex;align-items:center;gap:12px;padding:14px 20px;border-bottom:1px solid var(--line);background:var(--panel);position:sticky;top:0;z-index:10;flex-wrap:wrap}
+  h1{font-size:16px;margin:0;font-weight:600;letter-spacing:.5px}
+  .pills{display:flex;gap:8px;margin-left:auto;align-items:center;flex-wrap:wrap;justify-content:flex-end;min-width:0}
+  .pill{display:flex;align-items:center;gap:6px;padding:5px 10px;border-radius:20px;background:var(--panel2);border:1px solid var(--line);font-size:12px;color:var(--dim)}
+  .pill > span:last-child{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:min(42vw,340px)}
+  .dot{width:7px;height:7px;border-radius:50%;background:#5a6272}
+  .dot.on{background:var(--ok);box-shadow:0 0 8px rgba(61,220,151,.6)}
+  .dot.err{background:var(--bad)}
+  main{display:grid;grid-template-columns:minmax(0,1.12fr) minmax(0,1fr);gap:16px;padding:16px 20px;max-width:1900px;margin:0 auto;width:100%}
+  @media(max-width:980px){main{grid-template-columns:1fr}}
+  .side{display:flex;flex-direction:column;gap:16px;min-width:0}
+  .side .card{min-width:0}
+  .talk-card{display:flex;flex-direction:column}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px}
+  .card h2{font-size:13px;margin:0 0 10px;color:var(--dim);font-weight:600;letter-spacing:.6px;text-transform:uppercase}
+  .viewer{position:relative;background:#000;border-radius:10px;overflow:hidden;aspect-ratio:16/10;display:flex;align-items:center;justify-content:center}
+  .viewer img{width:100%;height:100%;object-fit:contain;display:block}
+  .viewer.fill img{object-fit:cover;object-position:center}
+  .viewer .empty{color:var(--dim);text-align:center;padding:24px;font-size:13px;line-height:1.9}
+  .viewer .badge{position:absolute;left:10px;top:10px;background:rgba(0,0,0,.6);padding:3px 8px;border-radius:6px;font-size:11px;color:var(--dim)}
+  .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+  button{font:inherit;cursor:pointer;border-radius:9px;border:1px solid var(--line);background:var(--panel2);color:var(--text);padding:9px 14px;transition:.15s}
+  button:hover{border-color:#3d4757}
+  button.primary{background:var(--brand);border-color:var(--brand);color:#fff;font-weight:600}
+  button.primary:disabled{opacity:.55;cursor:progress}
+  button.ghost{background:transparent}
+  .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  input[type=text],input[type=password],select{background:#10131a;border:1px solid var(--line);border-radius:8px;color:var(--text);padding:8px 10px;font:inherit;flex:1;min-width:0}
+  label.sw{display:flex;align-items:center;gap:6px;color:var(--dim);font-size:13px;cursor:pointer}
+  .result{min-height:200px}
+  @media(min-width:981px){
+    html,body{height:100%}
+    body{display:flex;flex-direction:column;min-height:100vh}
+    main{flex:1 1 auto;min-height:0;align-items:stretch}
+    main > .card,.side > .card{display:flex;flex-direction:column;min-height:0}
+    .viewer{flex:1 1 auto;aspect-ratio:auto;min-height:200px}
+    .side{min-height:0}
+    .talk-card{flex:1.1 1 0}
+    .result-card{flex:1 1 0}
+    .talk-card .answer{flex:1 1 auto;min-height:80px}
+    .result{flex:1 1 auto;min-height:0;overflow:auto}
+  }
+  .counts{display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+  .cnt{padding:8px 12px;border-radius:9px;background:var(--panel2);border:1px solid var(--line);font-size:12px;color:var(--dim)}
+  .cnt b{font-size:17px;margin-left:6px}
+  .cnt.ok b{color:var(--ok)} .cnt.bad b{color:var(--bad)} .cnt.unc b{color:var(--warn)}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th,td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--dim);font-weight:500;font-size:12px}
+  tr.wrong td:first-child{border-left:2px solid var(--bad);padding-left:8px}
+  tr.unclear td:first-child{border-left:2px solid var(--warn);padding-left:8px}
+  tr.correct td:first-child{border-left:2px solid var(--ok);padding-left:8px}
+  .v{font-weight:600}
+  .v.wrong{color:var(--bad)} .v.correct{color:var(--ok)} .v.unclear{color:var(--warn)}
+  .muted{color:var(--dim)}
+  .answer{margin-top:10px;background:#10131a;border:1px solid var(--line);border-radius:9px;padding:12px;font-size:15px;line-height:1.8;display:block;min-height:120px;flex:1 1 auto;overflow:auto;white-space:pre-wrap}
+  .answer:empty::before{content:'豆包的回答会显示在这里。';color:var(--dim);font-size:13px}
+  .qa{padding:9px 2px 11px;border-bottom:1px dashed var(--line)}
+  .qa:last-child{border-bottom:0}
+  .qa .q{color:var(--dim);font-size:12px;line-height:1.6;margin-bottom:4px}
+  .qa .q b{color:var(--brand);font-weight:600;margin-right:4px}
+  .qa .a{color:var(--text);font-size:15px;line-height:1.8;white-space:pre-wrap}
+  .qa .a b{color:var(--ok);font-weight:600;margin-right:4px}
+  .qa .a p{margin:0 0 12px;overflow-wrap:anywhere}
+  .qa .a p:last-child{margin-bottom:0}
+  dialog{color:var(--text);background:var(--panel);border:1px solid var(--line);border-radius:8px;width:min(900px,94vw);max-height:85vh;overflow:auto}
+  dialog::backdrop{background:rgba(0,0,0,.65)}
+  .qa.live .a{color:var(--dim)}
+  button.talk{width:100%;padding:14px;font-size:15px;font-weight:600;margin-top:10px;user-select:none;-webkit-user-select:none;touch-action:none}
+  .call-controls{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:14px}
+  .call-controls button{min-width:140px;min-height:46px;border-radius:24px;font-weight:600}
+  .call-start{background:#167447;border-color:#299b65}
+  .call-end{background:#aa3039;border-color:#d34a54}
+  .call-controls button:disabled{opacity:.4;cursor:default}
+  button.talk.rec{background:var(--bad);border-color:var(--bad);color:#fff;animation:pulse 1.1s ease-in-out infinite}
+  @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(255,107,107,.55)}50%{box-shadow:0 0 0 10px rgba(255,107,107,0)}}
+  .drawer{position:fixed;inset:0 0 0 auto;width:min(420px,92vw);background:var(--panel);border-left:1px solid var(--line);transform:translateX(100%);transition:.25s;padding:18px;overflow:auto;z-index:20}
+  .drawer.open{transform:none}
+  .drawer{width:min(520px,96vw)}
+  .settings-group{border-bottom:1px solid var(--line);padding:12px 0}
+  .settings-group summary{cursor:pointer;font-size:15px;font-weight:600;padding:8px 0;color:var(--text)}
+  .settings-group > .field:first-of-type{margin-top:12px}
+  .drawer .field > label:not(.sw){font-size:13px;color:var(--text);font-weight:600;margin-bottom:8px}
+  .drawer input[type=text],.drawer input[type=password],.drawer input[type=number],.drawer select{
+    background:#090d14;border:1px solid #617088;border-radius:6px;color:var(--text);padding:10px 12px;font:inherit;min-height:42px;max-width:100%;
+  }
+  .drawer .field > input,.drawer .field > select{width:100%;display:block}
+  .drawer input::placeholder{color:#8b98ac;font-weight:400}
+  .drawer input:focus,.drawer select:focus{outline:2px solid var(--brand);outline-offset:2px}
+  .drawer .hint{font-size:12px;color:#97a3b6;margin-top:7px;overflow-wrap:anywhere}
+  .drawer label.sw{color:var(--text);margin:10px 0;align-items:flex-start}
+  .drawer input[type=checkbox]{width:17px;height:17px;flex-shrink:0;accent-color:var(--brand)}
+  .settings-footer{position:sticky;bottom:-18px;background:var(--panel);padding:12px 0;border-top:1px solid var(--line);z-index:1}
+  .field{margin-bottom:14px}
+  .field label{display:block;color:var(--dim);font-size:12px;margin-bottom:5px}
+  .hint{color:var(--dim);font-size:12px;line-height:1.7}
+  .toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,20px);background:#242a35;border:1px solid var(--line);padding:10px 16px;border-radius:10px;opacity:0;transition:.25s;z-index:30;font-size:13px;max-width:80vw}
+  .toast.show{opacity:1;transform:translate(-50%,0)}
+  .toast.err{border-color:var(--bad)}
+  .spin{display:inline-block;width:12px;height:12px;border:2px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:s .8s linear infinite;margin-right:6px;vertical-align:-1px}
+  @keyframes s{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<header>
+  <h1>看书宝 · Mac</h1>
+  <div class="pills">
+    <div class="pill"><span class="dot" id="camDot"></span><span id="camText">摄像头检测中</span></div>
+    <div class="pill"><span class="dot" id="aiDot"></span><span id="aiText">模型</span></div>
+    <button class="ghost" onclick="toggleDrawer()">设置</button>
+  </div>
+</header>
+
+<main>
+  <section class="card">
+    <h2>作业画面</h2>
+    <div class="viewer" id="viewer">
+      <img id="stream" alt="" hidden>
+      <div class="empty" id="emptyBox">摄像头还没接入<br><span class="muted">插好 USB 后点「重连摄像头」</span></div>
+      <div class="badge" id="resBadge" hidden></div>
+    </div>
+    <div class="row" style="margin-top:10px">
+      <span class="hint" id="camPickHint" style="flex:1">正在读取摄像头列表…</span>
+      <button class="ghost" id="btnFit" onclick="toggleFit()" title="铺满会裁掉左右边缘；批改仍使用完整高清照片">画面：铺满</button>
+      <button class="ghost" onclick="openCameraSettings()">换摄像头</button>
+    </div>
+    <div class="actions">
+      <button class="primary" id="btnShot" onclick="checkCamera()">拍一张并批改</button>
+      <button onclick="pickFile()">上传照片批改</button>
+      <button onclick="restartCam()">重连摄像头</button>
+      <label class="sw"><input type="checkbox" id="split"> 分区识别（更准、更慢）</label>
+      <label class="sw"><input type="checkbox" id="parentMode"> 家长模式（只报错题数）</label>
+    </div>
+  </section>
+
+  <div class="side">
+    <section class="card talk-card">
+      <h2>对话</h2>
+      <button class="talk" id="btnTalk">🎙 按住说话 · 问豆包</button>
+      <div class="hint" id="talkHint" style="margin-top:6px">按住按钮（或按住空格键）说话，松开自动提交。豆包会同时看一眼左边画面再回答。</div>
+      <div class="call-controls">
+        <input type="checkbox" id="rtOn" hidden>
+        <button class="call-start" id="btnCallStart" onclick="setRt(true)">开始通话</button>
+        <button class="call-end" id="btnCallEnd" onclick="stopRt()" disabled>结束通话</button>
+        <span class="hint" id="rtState" role="status" aria-live="polite">未通话</span>
+      </div>
+      <div class="row" style="margin-top:10px">
+        <label class="sw"><input type="checkbox" id="wakeOn" onchange="setWake(this.checked)"> 小豆小豆 唤醒（不用按键）</label>
+        <span class="hint" id="wakeState"></span>
+      </div>
+      <div class="hint" id="micMeter" style="margin-top:4px">麦克风电平：等待采集…</div>
+      <div class="answer" id="answer"></div>
+    </section>
+
+  </div>
+</main>
+
+<dialog id="resultDialog">
+  <div class="row" style="justify-content:space-between;margin-bottom:12px">
+    <strong>批改结果</strong>
+    <button onclick="$('resultDialog').close()" aria-label="关闭批改结果">关闭</button>
+  </div>
+  <div id="result"></div>
+</dialog>
+
+<aside class="drawer" id="drawer">
+  <h2 style="margin-top:0">设置</h2>
+  <div class="field">
+    <label>对话与记忆</label>
+    <label class="sw"><input type="checkbox" id="memoryEnabled" onchange="memoryAction('enabled',{enabled:this.checked})">保存并使用文字记忆</label>
+    <div class="row"><select id="memoryChats" aria-label="历史对话"></select>
+      <button onclick="memoryAction('select',{id:$('memoryChats').value})">继续</button>
+      <button onclick="memoryAction('new')">新对话</button></div>
+    <div class="row" style="margin-top:8px"><input type="text" id="memoryText" placeholder="要记住的学习信息">
+      <button onclick="memoryAction('add',{text:$('memoryText').value})">记住</button></div>
+    <div id="memoryFacts" style="margin-top:8px"></div>
+    <button class="ghost" onclick="if(confirm('删除全部历史对话和记忆？')) memoryAction('clear')">清空历史与记忆</button>
+  </div>
+  <div class="field">
+    <label>视觉模型 API Key · 必填凭证</label>
+    <input type="password" id="cfgKey" placeholder="粘贴 API Key（36 位 UUID），留空则不改动">
+    <div class="hint">用于看题和批改。已配置时不必重复填写，留空保留原值。</div>
+  </div>
+  <div class="field">
+    <label>模型 / 接入点 ID</label>
+    <input type="text" id="cfgModel" placeholder="doubao-seed-1-6-250615 或 ep-xxxx">
+  </div>
+  <div class="field" id="camField">
+    <label>摄像头设备（预览和批改都用这一路）</label>
+    <div class="row">
+      <select id="cfgDevice" style="flex:2" onchange="applyCamera()"><option value="">自动挑选（优先外置）</option></select>
+      <button class="ghost" onclick="loadCameras(true)">扫描外置</button>
+    </div>
+    <div class="hint">选中即刻切换，不用点保存。只列真实相机，虚拟/投屏相机已隐藏；按设备名锁定，USB 重新插拔后索引变了也不会认错。</div>
+  </div>
+  <div class="field">
+    <label>拍照分辨率（预览固定 720p 保流畅）</label>
+    <select id="cfgSize">
+      <option value="1280x960">1280x960 (推荐，4:3 竖向能装下整页)</option>
+      <option value="1920x1080">1920x1080 (偶发花屏，慎用)</option>
+      <option value="1280x720">1280x720 (最快)</option>
+      <option value="640x480">640x480 (省资源)</option>
+    </select>
+    <label class="sw"><input type="checkbox" id="cfgFlip"> 画面翻转 180°（吸盘臂倒装时勾选）</label>
+  </div>
+  <div class="field">
+    <label>麦克风（小豆唤醒 + 按住说话）</label>
+    <select id="cfgMic" onchange="applyMic()"><option value="">检测中…</option></select>
+    <div class="hint" id="micInfo">检测中…</div>
+  </div>
+  <div class="field">
+    <label>豆包语音 AppID（火山「语音技术」控制台）</label>
+    <input type="text" id="cfgTtsAppid" placeholder="例如 1234567890">
+    <div class="hint">方舟 API Key 只能调大模型，不能合成声音。到火山引擎控制台 → 语音技术 → 语音合成 → 创建应用，复制 AppID 与 Access Token。</div>
+  </div>
+  <div class="field">
+    <label>豆包语音 Access Token</label>
+    <input type="password" id="cfgTtsToken" placeholder="留空则不改动已保存的 Token">
+    <div class="hint" id="ttsInfo">状态检测中…</div>
+  </div>
+  <div class="field">
+    <label>流式语音识别 API Key（火山「语音技术」→ API Key 管理）</label>
+    <input type="password" id="cfgAsrKey" placeholder="留空则复用上面的语音 AppID + Access Token">
+    <div class="row" style="margin-top:6px">
+      <button class="ghost" onclick="testAsr()">识别测试（录 3 秒）</button>
+      <span class="hint" id="asrInfo">状态检测中…</span>
+    </div>
+    <div class="hint">配好后孩子一说完就能出字，不用再等「整段录音丢给大模型」那 3~5 秒。方舟的 ark- Key 不能用于语音识别。</div>
+  </div>
+  <div class="field">
+    <label>豆包音色</label>
+    <div class="row">
+      <select id="cfgTtsVoice" style="flex:1">
+        <option value="zh_female_shuangkuaisisi_moon_bigtts">爽快思思 · 女声（推荐）</option>
+        <option value="zh_female_vv_moon_bigtts">VV · 女声</option>
+        <option value="zh_female_wanwanxiaohe_moon_bigtts">湾湾小何 · 女声</option>
+        <option value="zh_male_yunzhoujieshuo_moon_bigtts">云舟 · 男声</option>
+      </select>
+      <button class="ghost" onclick="testTts()">试听</button>
+    </div>
+  </div>
+  <div class="field">
+    <label>实时语音 API Key · 必填凭证</label>
+    <input type="password" id="cfgRtKey" placeholder="36 位 UUID，留空则不改动">
+    <div class="hint">端到端实时语音走「豆包语音」的 Key，方舟 ark- Key 不能用于这里。当前：<span id="rtKeyInfo">检测中…</span></div>
+    <div class="row" style="margin-top:8px">
+      <span class="hint" style="flex:0 0 auto">实时音色</span>
+      <select id="cfgRtSpeaker" style="flex:1"></select>
+    </div>
+    <label class="sw"><input type="checkbox" id="cfgRtBarge"> 我说话就直接打断小豆（外放时可能被自己的回声打断）</label>
+    <label class="sw"><input type="checkbox" id="cfgRtKeyword"> 说“小豆小豆”打断当前播报</label>
+    <div class="row" style="margin-top:6px">
+      <span class="hint" style="flex:0 0 auto">开场白</span>
+      <input type="text" id="cfgRtHello" maxlength="40" style="flex:1" placeholder="我在，有不会的题直接问我。">
+    </div>
+    <div class="hint">默认半双工：小豆说话时麦克风静音，不会自问自答；打开上面的打断开关才是全双工。</div>
+  </div>
+  <div class="field">
+    <label>唤醒应答</label>
+    <input type="text" id="cfgWakeReply" maxlength="20" placeholder="我在">
+    <div class="hint">喊「小豆小豆」后立刻播放这句。默认「我在」会缓存到本机，减少等待。</div>
+  </div>
+  <div class="field">
+    <label>连续对话</label>
+    <label class="sw"><input type="checkbox" id="cfgFollowup"> 答完自动接着听（像打视频电话，不用再喊唤醒词）</label>
+    <div class="row" style="margin-top:6px">
+      <span class="hint">每轮最多追加</span>
+      <input type="number" id="cfgFollowupTurns" min="0" max="5" step="1" style="width:70px">
+      <span class="hint">轮，每轮等</span>
+      <input type="number" id="cfgFollowupSec" min="3" max="30" step="1" style="width:70px">
+      <span class="hint">秒</span>
+    </div>
+  </div>
+  <div class="field">
+    <label>备用本机音色（豆包语音未配置时）</label>
+    <input type="text" id="cfgVoice" placeholder="Tingting">
+  </div>
+  <div class="field">
+    <label>摄像头物理按键</label>
+    <div class="hint" id="hidInfo">按下摄像头上的按钮，这里会出现按键编号，可直接绑定动作。</div>
+    <div id="hidEvents" style="margin-top:8px"></div>
+  </div>
+  <div class="row settings-footer" style="margin-top:18px">
+    <button class="primary" onclick="saveCfg()">保存</button>
+    <button onclick="testAi()">测试模型</button>
+    <button class="ghost" onclick="toggleDrawer()">关闭</button>
+  </div>
+  <div class="hint" style="margin-top:16px" id="cfgInfo"></div>
+</aside>
+
+<div class="toast" id="toast"></div>
+<input type="file" id="file" accept="image/*" hidden>
+
+<script>
+const $ = id => document.getElementById(id);
+let cfg = {};
+
+function organizeSettings(){
+  const drawer=$('drawer');
+  const groups=[
+    ['摄像头与收音',true,['cfgDevice','cfgSize','cfgMic']],
+    ['实时对话',true,['cfgRtKey']],
+    ['对话与记忆',false,['memoryEnabled']],
+    ['视觉模型连接',false,['cfgKey','cfgModel']],
+    ['高级：旧版唤醒与独立朗读',false,['cfgWakeReply','cfgFollowup','cfgAsrKey','cfgTtsAppid','cfgTtsToken','cfgTtsVoice','hidInfo']]
+  ];
+  const footer=drawer.querySelector('.settings-footer');
+  for(const [title,open,ids] of groups){
+    const section=document.createElement('details'); section.className='settings-group'; section.open=open;
+    const heading=document.createElement('summary'); heading.textContent=title; section.appendChild(heading);
+    for(const id of ids){const field=$(id)?.closest('.field'); if(field) section.appendChild(field);}
+    drawer.insertBefore(section,footer);
+  }
+  $('cfgVoice').closest('.field').hidden=true;
+}
+organizeSettings();
+
+function toast(msg, isErr){ const t=$('toast'); t.textContent=msg; t.className='toast show'+(isErr?' err':''); clearTimeout(t._h); t._h=setTimeout(()=>t.className='toast',3800); }
+function toggleDrawer(){ $('drawer').classList.toggle('open'); if($('drawer').classList.contains('open')) {loadCfg(); loadMemory();} }
+async function loadMemory(){
+  const r = await fetch('/api/memory').then(r=>r.json());
+  $('memoryEnabled').checked = r.enabled;
+  $('memoryChats').replaceChildren();
+  for(const chat of r.chats){
+    const o = document.createElement('option'); o.value=chat.id; o.textContent=chat.title;
+    o.selected=chat.id===r.current; $('memoryChats').appendChild(o);
+  }
+  $('memoryFacts').replaceChildren();
+  for(const fact of r.facts){
+    const row=document.createElement('div'); row.className='row';
+    const text=document.createElement('span'); text.textContent=fact.text; text.style.cssText='flex:1;overflow-wrap:anywhere';
+    const del=document.createElement('button'); del.textContent='删除'; del.onclick=()=>memoryAction('delete',{id:fact.id});
+    row.append(text,del); $('memoryFacts').appendChild(row);
+  }
+}
+async function memoryAction(action,fields={}){
+  try{
+    const resume=rtRunning;
+    const r=await fetch('/api/memory',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action,...fields})}).then(r=>r.json());
+    if(!r.ok) throw Error(r.error||'记忆操作失败');
+    rtRunning=false; $('rtOn').checked=false; chatSig='';
+    $('memoryText').value=''; await loadMemory(); await refreshChat();
+    if(resume) await setRt(true);
+    toast('记忆已更新');
+  }catch(e){toast(String(e),true);}
+}
+
+async function loadCfg(){
+  const r = await fetch('/api/status').then(r=>r.json());
+  cfg = r.config;
+  $('cfgModel').value = cfg.model||'';
+  $('cfgSize').value = cfg.still_size||'1280x960';
+  $('cfgFlip').checked = cfg.flip!==false;
+  $('cfgVoice').value = cfg.voice||'';
+  $('cfgTtsAppid').value = cfg.tts_appid||'';
+  $('cfgTtsVoice').value = cfg.tts_voice||'zh_female_shuangkuaisisi_moon_bigtts';
+  $('cfgWakeReply').value = cfg.wake_reply||'我在';
+  $('cfgFollowup').checked = cfg.followup_enabled!==false;
+  $('cfgFollowupTurns').value = cfg.followup_turns ?? 2;
+  $('cfgFollowupSec').value = cfg.followup_seconds ?? 8;
+  $('ttsInfo').textContent = cfg.tts_ready
+    ? ('豆包音色已配置：'+(cfg.tts_token_hint||'••••')+'　音色 '+($('cfgTtsVoice').selectedOptions[0]?.textContent||cfg.tts_voice))
+    : '豆包音色未配置，当前会用本机音色兜底。';
+  $('asrInfo').textContent = cfg.asr_ready
+    ? ('流式识别已就绪（'+(cfg.asr_key_set ? (cfg.asr_key_hint||'API Key') : '复用语音 AppID')+'）')
+    : '流式识别未配置，暂时还是整段录音转写，会慢 3~5 秒。';
+  $('rtKeyInfo').textContent = cfg.rt_ready
+    ? ('已配置 '+(cfg.rt_key_hint||'••••')+(cfg.rt_key_set?'':'（复用语音凭证）'))
+    : '未配置，实时通话开不起来。';
+  const spk = $('cfgRtSpeaker');
+  spk.innerHTML = '';
+  for(const s of (cfg.rt_speakers||[])){
+    const o = document.createElement('option'); o.value=s.id; o.textContent=s.name; spk.appendChild(o);
+  }
+  spk.value = cfg.rt_speaker || 'ICL_uranus_zh_female_wenrouwenya_tob';
+  $('cfgRtBarge').checked = !!cfg.rt_barge_in;
+  $('cfgRtKeyword').checked = cfg.rt_keyword_interrupt !== false;
+  $('cfgRtHello').value = cfg.rt_hello || '我在，有不会的题直接问我。';
+  $('cfgInfo').textContent = '当前 Key：'+(cfg.api_key_set?('已配置 '+(cfg.api_key_hint||'')):'未配置');
+  await loadCameras(false);
+  loadMic();
+  $('wakeOn').checked = !!cfg.wake_enabled;
+  if(cfg.wake_enabled) startWakePoll(); else stopWakePoll();
+  refreshChat();
+}
+
+let chatSig = '';
+function answerParagraphs(text){
+  return String(text).split(/\n+/).flatMap(line=>{
+    const sentences = line.match(/[^。！？!?]+[。！？!?]*|[。！？!?]+/g) || [];
+    const paragraphs = [];
+    let current = '';
+    for(const sentence of sentences){
+      current += sentence;
+      if(current.length >= 65){ paragraphs.push(current.trim()); current = ''; }
+    }
+    if(current.trim()) paragraphs.push(current.trim());
+    return paragraphs;
+  }).filter(Boolean);
+}
+
+function renderChat(list){
+  const sig = JSON.stringify(list||[]);
+  if(sig === chatSig) return;
+  chatSig = sig;
+  const box = $('answer');
+  const stick = box.scrollTop + box.clientHeight >= box.scrollHeight - 40;
+  box.innerHTML = '';
+  if(!list || !list.length){
+    const d = document.createElement('div'); d.className='hint';
+    d.textContent = '按住说话，或喊「小豆小豆」提问。每一轮的问答都会按顺序留在这里。';
+    box.appendChild(d); return;
+  }
+  for(const e of list){
+    const item = document.createElement('div');
+    item.className = 'qa' + (e.done ? '' : ' live');
+    const q = document.createElement('div'); q.className='q';
+    const qb = document.createElement('b'); qb.textContent = '你问'; q.appendChild(qb);
+    q.appendChild(document.createTextNode(e.q || '（正在听清你刚才的话…）'));
+    const a = document.createElement('div'); a.className='a';
+    const ab = document.createElement('b'); ab.textContent = '小豆'; a.appendChild(ab);
+    const paragraphs = answerParagraphs(e.a || '（在想…）');
+    for(const text of paragraphs){
+      const p = document.createElement('p'); p.textContent = text; a.appendChild(p);
+    }
+    item.appendChild(q); item.appendChild(a);
+    box.appendChild(item);
+  }
+  if(stick) box.scrollTop = box.scrollHeight;
+}
+
+async function refreshChat(){
+  try{
+    if(rtRunning) return;   // 实时通话的历史由 rtTick 负责，别被唤醒模式的旧历史覆盖
+    const r = await fetch('/api/voice/state').then(r=>r.json());
+    if(Array.isArray(r.history)) renderChat(r.history);
+  }catch(e){}
+}
+
+async function loadMic(){
+  try{
+    const r = await fetch('/api/mic/devices').then(r=>r.json());
+    if(!r.ok){ $('micInfo').textContent = '不可用：'+(r.error||''); $('cfgMic').innerHTML='<option value="">不可用</option>'; return; }
+    const p = r.picked||{};
+    const sel = $('cfgMic');
+    sel.innerHTML = '';
+    for(const d of (r.devices||[])){
+      const o = document.createElement('option');
+      o.value = d.name; o.textContent = d.name + (d.name===p.name?'（当前）':'');
+      sel.appendChild(o);
+    }
+    sel.value = p.name || '';
+    $('micInfo').textContent = '正在使用：'+(p.name||'?')+'（设备 '+p.index+'）　共 '+(r.devices||[]).length+' 个输入设备';
+  }catch(e){ $('micInfo').textContent = '检测失败：'+e; }
+}
+
+// 切换麦克风后马上生效：唤醒收音下一轮就会重新打开新设备。
+async function applyMic(){
+  const name = $('cfgMic').value;
+  $('micInfo').textContent = '正在切换到 '+name+'…';
+  try{
+    const r = await fetch('/api/config',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({audio_hint:name})}).then(r=>r.json());
+    if(!r.ok) throw new Error(r.error||'保存失败');
+    cfg = r.config || cfg;
+    $('micInfo').textContent = '已切换到 '+name+'，喊一声看下方电平是否跳动（高于 -48 dB 才能唤醒）。';
+    toast('麦克风已切换到 '+name);
+  }catch(e){ toast('切换麦克风失败：'+e, true); }
+}
+
+let camDevices = [];
+async function loadCameras(announce){
+  try{
+    const r = await fetch('/api/camera/probe' + (announce ? '?modes=1' : '')).then(r=>r.json());
+    camDevices = r.devices||[];
+    const sel = $('cfgDevice');
+    const curName = cfg.camera_name || '';
+    sel.innerHTML = '<option value="">自动挑选（优先外置）</option>';
+    const usable = camDevices.filter(d=>d.kind!=='virtual');
+    const groups = [['外置摄像头', usable.filter(d=>d.kind==='external')],
+                    ['内置摄像头', usable.filter(d=>d.kind!=='external')]];
+    for(const [label, list] of groups){
+      if(!list.length) continue;
+      const g = document.createElement('optgroup'); g.label = label;
+      for(const d of list){
+        const o = document.createElement('option');
+        o.value = d.name;
+        o.textContent = d.name;
+        g.appendChild(o);
+      }
+      sel.appendChild(g);
+    }
+    sel.value = usable.some(d=>d.name===curName) ? curName : '';
+    const ext = usable.filter(d=>d.kind==='external');
+    const cur = r.current || {};
+    let hint = cur.connected
+      ? ('当前在用：'+(cur.device||'')+(cur.resolution?(' · '+cur.resolution):''))
+      : '当前没有画面'+(cur.error?('：'+cur.error):'');
+    if(cur.notice) hint += ' ｜ ' + cur.notice;
+    else if(ext.length) hint += ' ｜ 可选外置：'+ext.map(d=>d.name).join('、');
+    else if(curName) hint += ' ｜ 已选「'+curName+'」但没枚举到，检查 USB 线和接口';
+    else hint += ' ｜ 没发现外置摄像头，插好后到设置里点「扫描外置」';
+    const virt = camDevices.filter(d=>d.kind==='virtual').length;
+    if(virt) hint += '（已隐藏 '+virt+' 个虚拟相机）';
+    $('camPickHint').textContent = hint;
+    if(r.target) $('cfgInfo').textContent = (cfg.api_key_set?('Key 已配置 '+(cfg.api_key_hint||'')):'Key 未配置')
+      + '　当前选中：' + r.target.name + (r.modes&&r.modes.length?('　支持 '+r.modes.join('/')):'');
+    if(announce) toast(ext.length ? ('发现 '+ext.length+' 个外置摄像头') : '没发现外置摄像头，请检查 USB 连接', !ext.length);
+  }catch(e){ if(announce) toast('摄像头扫描失败：'+e, true); }
+}
+
+async function applyCamera(){
+  const sel = $('cfgDevice');
+  const name = sel.value || '';
+  toast(name ? ('正在切换到 '+name+'…') : '正在切回自动选择…');
+  $('camPickHint').textContent = '正在切换并等待画面…';
+  sel.disabled = true;
+  try{
+    const r = await fetch('/api/camera/switch',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name})}).then(r=>r.json());
+    if(!r.ok){ toast(r.error||'切换失败',true); return; }
+    cfg = r.config || cfg;
+    const cam = r.camera||{};
+    if(r.matched) toast('已切到 '+(cam.device||name)+' '+(cam.resolution||''));
+    else toast('已保存选择，但画面没起来：'+(cam.error||'未知原因'), true);
+  }catch(e){ toast('切换失败：'+e, true); }
+  finally{ sel.disabled = false; await refresh(); await loadCameras(false); }
+}
+
+function openCameraSettings(){
+  $('drawer').classList.add('open');
+  const f = $('camField');
+  if(f) f.scrollIntoView({block:'center'});
+  setTimeout(()=>{ const s=$('cfgDevice'); if(s) s.focus(); }, 260);
+}
+
+// 预览显示方式：铺满（裁左右黑边）/ 完整（保留整幅画面）。批改始终用完整高清单帧。
+function applyFit(on){
+  $('viewer').classList.toggle('fill', on);
+  const b = $('btnFit'); if(!b) return;
+  b.textContent = on ? '看完整画面' : '铺满画面';
+  b.title = on
+    ? '当前铺满：为了填满上下高度会裁掉左右边缘。点一下改为完整画面（批改不受影响）。'
+    : '当前完整：保留整幅画面，上下会有黑边。点一下改为铺满。';
+}
+function toggleFit(){
+  const on = !$('viewer').classList.contains('fill');
+  try{ localStorage.setItem('ksb_fit', on ? '1' : '0'); }catch(e){}
+  applyFit(on);
+}
+
+async function saveCfg(){
+  const devName = $('cfgDevice').value;
+  const camChanged = devName !== (cfg.camera_name||'');
+  const body = {model:$('cfgModel').value.trim(),
+                camera_name: devName, camera_index: null,
+                still_size:$('cfgSize').value, flip:$('cfgFlip').checked,
+                voice:$('cfgVoice').value.trim(),
+                tts_appid:$('cfgTtsAppid').value.trim(),
+                tts_voice:$('cfgTtsVoice').value,
+                wake_reply:$('cfgWakeReply').value.trim()||'我在',
+                followup_enabled:$('cfgFollowup').checked,
+                followup_turns:parseInt($('cfgFollowupTurns').value||'2',10),
+                followup_seconds:parseInt($('cfgFollowupSec').value||'8',10),
+                rt_speaker:$('cfgRtSpeaker').value,
+                rt_barge_in:$('cfgRtBarge').checked,
+                rt_keyword_interrupt:$('cfgRtKeyword').checked,
+                rt_hello:$('cfgRtHello').value.trim()||'我在，有不会的题直接问我。'};
+  const k = $('cfgKey').value.trim(); if(k) body.api_key = k;
+  const tk = $('cfgTtsToken').value.trim(); if(tk) body.tts_token = tk;
+  const ak = $('cfgAsrKey').value.trim(); if(ak) body.asr_key = ak;
+  const rk = $('cfgRtKey').value.trim(); if(rk) body.rt_api_key = rk;
+  const r = await fetch('/api/config',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}).then(r=>r.json());
+  if(r.ok){ $('cfgKey').value=''; $('cfgRtKey').value='';
+    if(r.test && r.test.ok && r.tts_test && !r.tts_test.ok) toast('大模型已连通；豆包声音失败：'+(r.tts_test.errors||[]).join('；'), true);
+    else if(r.test && r.test.ok) toast(r.config.tts_ready ? '已保存，豆包大模型与豆包音色都正常' : '已保存，豆包大模型正常；声音还缺语音凭证');
+    else if(r.test) toast('Key 已保存，但豆包连不上：'+(r.test.error||''), true);
+    else if(r.tts_test && r.tts_test.ok) toast('已保存，豆包音色正常');
+    else if(r.tts_test && !r.tts_test.ok) toast('已保存，但豆包声音失败：'+(r.tts_test.errors||[]).join('；'), true);
+    else toast('已保存，正在重启取流…');
+    if(camChanged){
+      fetch('/api/camera/switch',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:devName})})
+        .then(x=>x.json()).then(x=>{ if(x.ok && !x.matched) toast('已保存，但画面没起来：'+((x.camera||{}).error||''), true); })
+        .catch(()=>{});
+    }else{
+      fetch('/api/camera/restart',{method:'POST'}).catch(()=>{});
+    }
+    setTimeout(()=>{ refresh(); loadCameras(false); },3000); } else toast(r.error||'保存失败', true);
+}
+
+async function testTts(){
+  toast('正在合成豆包声音…');
+  const r = await fetch('/api/tts/test',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:'你好，我是小豆，豆包音色已经接好了。'})}).then(r=>r.json()).catch(e=>({ok:false,error:String(e)}));
+  toast(r.ok ? ('豆包音色正常，合成用了 '+r.synth_seconds+' 秒') : (r.error||'试听失败'), !r.ok);
+}
+
+async function testAi(){
+  toast('正在测试…');
+  const r = await fetch('/api/test',{method:'POST'}).then(r=>r.json()).catch(e=>({ok:false,error:String(e)}));
+  toast(r.ok ? '模型可用：'+r.text : (r.error||'失败'), !r.ok);
+}
+
+async function testAsr(){
+  if(rtRunning){ toast('先关掉实时通话再测识别', true); return; }
+  toast('请对着摄像头说 3 秒…');
+  const r = await fetch('/api/asr/test',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({seconds:3})})
+    .then(r=>r.json()).catch(e=>({ok:false,error:String(e)}));
+  toast(r.ok ? ('识别到：'+(r.text||'（空）')+'　用时 '+(r.seconds||0)+' 秒' + (r.device?(' · '+r.device):'')) : (r.error||'识别失败'), !r.ok);
+}
+
+async function refresh(){
+  try{
+    const r = await fetch('/api/status').then(r=>r.json());
+    const c = r.camera;
+    // 连接状态一变就重刷相机下拉框，别让“当前没有画面”的旧提示留在页面上
+    if(window._lastConnected!==undefined && window._lastConnected!==c.connected) setTimeout(()=>loadCameras(false),300);
+    window._lastConnected = c.connected;
+    $('camDot').className = 'dot '+(c.connected?'on':'err');
+    $('camText').textContent = c.connected ? ('摄像头 '+(c.device||'')+' '+(c.resolution||'')) : '摄像头未连接';
+    $('aiDot').className = 'dot '+(r.config.api_key_set?'on':'');
+    $('aiText').textContent = r.config.api_key_set ? ('AI '+(r.config.model||'')) : '未配置 Key';
+    if(c.connected){
+      $('stream').hidden=false; $('emptyBox').hidden=true;
+      // 画面卡住自愈：帧号两轮（10 秒）没变化就重建视频流连接
+      if(c.frames!==undefined){
+        if(c.frames===window._lastFrames) window._stale=(window._stale||0)+1; else { window._stale=0; window._lastFrames=c.frames; }
+        if(window._stale>=2){ $('stream').dataset.on='0'; window._stale=0; }
+      }
+      if($('stream').dataset.on!=='1'){ $('stream').src='/stream.mjpg?'+Date.now(); $('stream').dataset.on='1'; }
+      $('resBadge').hidden=false; $('resBadge').textContent=(c.resolution||'')+' · '+(c.device||'');
+    }else{
+      $('stream').hidden=true; $('emptyBox').hidden=false; $('resBadge').hidden=true;
+      $('stream').dataset.on='0';
+      if(c.error) $('emptyBox').innerHTML = '摄像头未接入<br><span class="muted">'+c.error+'</span>';
+    }
+  }catch(e){ $('camDot').className='dot err'; $('camText').textContent='服务未响应'; }
+}
+
+async function restartCam(){ await fetch('/api/camera/restart',{method:'POST'}); toast('正在重连摄像头…'); setTimeout(refresh,1500); }
+
+function pickFile(){ $('file').click(); }
+$('file').addEventListener('change', async e=>{
+  const f = e.target.files[0]; if(!f) return;
+  const dataUrl = await shrink(f);
+  runCheck(dataUrl, 'upload');
+  e.target.value='';
+});
+
+// 上传前压缩：长边 2400，JPEG 0.9
+function shrink(file){
+  return new Promise((res,rej)=>{
+    const img = new Image(); const url = URL.createObjectURL(file);
+    img.onload = ()=>{
+      const m = Math.max(img.width,img.height); const k = Math.min(1, 2400/m);
+      const cv = document.createElement('canvas');
+      cv.width = Math.round(img.width*k); cv.height = Math.round(img.height*k);
+      cv.getContext('2d').drawImage(img,0,0,cv.width,cv.height);
+      URL.revokeObjectURL(url);
+      res(cv.toDataURL('image/jpeg',0.9));
+    };
+    img.onerror = rej; img.src = url;
+  });
+}
+
+function busy(btn, on, text){
+  if(on){ btn.dataset.t=btn.textContent; btn.disabled=true; btn.innerHTML='<span class="spin"></span>'+(text||'处理中'); }
+  else { btn.disabled=false; btn.textContent=btn.dataset.t||text||'完成'; }
+}
+
+async function checkCamera(){ runCheck(null,'camera'); }
+
+async function runCheck(image, src){
+  if(!$('resultDialog').open) $('resultDialog').showModal();
+  const btn = $('btnShot'); busy(btn,true,'批改中');
+  $('result').innerHTML = '<div class="hint"><span class="spin"></span>正在识别题目并批改，一张图约 10-30 秒…</div>';
+  try{
+    const body = {mode: $('parentMode').checked?'count_only':'full', split: $('split').checked?1:0};
+    if(image) body.image = image;
+    const r = await fetch('/api/check',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}).then(r=>r.json());
+    if(!r.ok){ $('result').innerHTML='<div class="hint" style="color:var(--bad)">'+esc(r.error||'失败')+'</div>'; toast(r.error||'批改失败',true); return; }
+    render(r.result, r);
+  }catch(e){ $('result').innerHTML='<div class="hint" style="color:var(--bad)">请求失败：'+esc(String(e))+'</div>'; }
+  finally{ busy(btn,false,'拍一张并批改'); }
+}
+
+const esc = s => String(s??'').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+function render(res, meta){
+  const c = res.counts||{total:0,correct:0,wrong:0,unclear:0};
+  const items = (res.items||[]).filter(i=>i && (i.no!==undefined));
+  let html = '<div class="counts">'
+    + '<div class="cnt">总题数<b>'+c.total+'</b></div>'
+    + '<div class="cnt ok">正确<b>'+c.correct+'</b></div>'
+    + '<div class="cnt bad">错误<b>'+c.wrong+'</b></div>'
+    + '<div class="cnt unc">看不清<b>'+c.unclear+'</b></div>'
+    + '<div class="cnt">科目<b style="font-size:14px">'+esc(res.subject||'?')+'</b></div></div>';
+  if(res.notes) html += '<div class="hint" style="margin-bottom:10px">'+esc(res.notes)+'</div>';
+  html += '<table><thead><tr><th style="width:52px">题号</th><th style="width:56px">判定</th><th style="width:82px">错因</th><th>正确答案</th><th>提示</th></tr></thead><tbody>';
+  const label = {correct:'✓ 对', wrong:'✗ 错', unclear:'? 看不清'};
+  for(const it of items){
+    const v = it.verdict||'unclear';
+    html += '<tr class="'+v+'"><td>'+esc(it.no)+'</td>'
+      + '<td class="v '+v+'">'+(label[v]||esc(v))+'</td>'
+      + '<td class="muted">'+esc(it.error_type||'—')+'</td>'
+      + '<td>'+esc(it.answer||'—')+'</td>'
+      + '<td class="muted">'+esc(it.hint||'—')+'</td></tr>';
+  }
+  html += '</tbody></table>';
+  html += '<div class="hint" style="margin-top:10px">来源 '+(meta.source==='camera'?'摄像头':'上传照片')+' · 图片 '+Math.round((meta.image_bytes||0)/1024)+'KB · 分块 '+(meta.tiles||1)+'</div>';
+  $('result').innerHTML = html;
+}
+
+// ---------- 按住说话 ----------
+const TALK_IDLE = '按住按钮（或按住空格键）说话，松开自动提交。豆包会同时看一眼摄像头画面再回答。';
+let talking = false, talkT0 = 0, talkTimer = null;
+
+async function talkStart(e){
+  if(e && e.cancelable) e.preventDefault();
+  if(rtRunning){ toast('实时通话中，直接说话就行，不用按'); return; }
+  if(talking) return;
+  if(!cfg.api_key_set){ toast('还没配置豆包 Key，先到设置里填', true); return; }
+  talking = true;
+  talkT0 = performance.now();
+  $('btnTalk').classList.add('rec');
+  $('btnTalk').textContent = '● 录音中… 松开结束';
+  talkTimer = setInterval(()=>{
+    $('talkHint').textContent = '录音中 ' + ((performance.now()-talkT0)/1000).toFixed(1) + ' 秒…';
+  }, 100);
+  try{
+    const r = await fetch('/api/listen/start',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({max_seconds:30})}).then(r=>r.json());
+    if(!r.ok) throw new Error(r.error || '录音启动失败');
+  }catch(err){
+    talkReset(); toast(String(err.message||err), true);
+  }
+}
+
+async function talkStop(){
+  if(!talking) return;
+  const secs = (performance.now()-talkT0)/1000;
+  talking = false;
+  clearInterval(talkTimer);
+  $('btnTalk').classList.remove('rec');
+  $('btnTalk').textContent = '识别中…';
+  $('talkHint').textContent = secs < 0.4 ? '太短了，按住说完整一句。' : '已录 ' + secs.toFixed(1) + ' 秒，豆包正在听…';
+  try{
+    const r = await fetch('/api/listen/stop',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({speak:true})}).then(r=>r.json());
+    if(!r.ok){ toast(r.error||'没听清，再说一次', true); $('talkHint').textContent = r.error||TALK_IDLE; }
+    else{
+      await refreshChat();
+      $('talkHint').textContent = '录了 '+r.seconds+' 秒 · 回答用了 '+r.elapsed+' 秒';
+    }
+  }catch(err){ toast('请求失败：'+err, true); }
+  finally{ $('btnTalk').textContent = '🎙 按住说话 · 问豆包'; }
+}
+
+function talkReset(){
+  talking = false; clearInterval(talkTimer);
+  $('btnTalk').classList.remove('rec');
+  $('btnTalk').textContent = '🎙 按住说话 · 问豆包';
+  $('talkHint').textContent = TALK_IDLE;
+}
+
+$('btnTalk').addEventListener('pointerdown', talkStart);
+$('btnTalk').addEventListener('pointerup', talkStop);
+$('btnTalk').addEventListener('pointercancel', talkStop);
+$('btnTalk').addEventListener('pointerleave', ()=>{ if(talking) talkStop(); });
+
+// 空格键：按住说话（输入框里打字时不触发）
+document.addEventListener('keydown', e=>{
+  if(e.code!=='Space' || e.repeat) return;
+  const t = e.target.tagName;
+  if(t==='INPUT' || t==='TEXTAREA' || t==='SELECT') return;
+  e.preventDefault(); talkStart(e);
+});
+document.addEventListener('keyup', e=>{
+  if(e.code!=='Space') return;
+  const t = e.target.tagName;
+  if(t==='INPUT' || t==='TEXTAREA' || t==='SELECT') return;
+  e.preventDefault(); talkStop();
+});
+
+// ---------- 实时通话（端到端语音） ----------
+let rtRunning = false, rtTimer = null;
+let callBusy = false;
+function syncCallButtons(){
+  $('btnCallStart').disabled = callBusy || rtRunning;
+  $('btnCallEnd').disabled = callBusy || !rtRunning;
+  $('btnCallStart').textContent = callBusy && !rtRunning ? '正在连接…' : '开始通话';
+}
+const RT_LABEL = {connecting:'正在连接…', listening:'在听，直接说话', thinking:'小豆在想…',
+                  speaking:'小豆在说', off:'已结束', error:'出错'};
+
+async function setRt(on){
+  if(callBusy) return;
+  if(on && rtRunning) return;
+  if(!on){ stopRt(); return; }
+  callBusy = true; syncCallButtons();
+  if($('wakeOn').checked){ $('wakeOn').checked = false; await setWake(false); }
+  $('rtState').textContent = '正在连接…'; $('rtState').style.color = 'var(--dim)';
+  $('btnTalk').disabled = true;
+  const r = await fetch('/api/rt/start',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({})})
+    .then(r=>r.json()).catch(e=>({ok:false, error:String(e)}));
+  if(!r.ok){
+    callBusy = false; syncCallButtons();
+    $('rtOn').checked = false; $('btnTalk').disabled = false; $('rtState').textContent = '';
+    toast(r.error||'实时通话开启失败', true); return;
+  }
+  rtRunning = true; chatSig = '';
+  callBusy = false; syncCallButtons();
+  $('talkHint').textContent = '实时通话中：直接说话就行，小豆说完你接着说，能随时插话。';
+  startRtPoll(); toast('实时通话已开启');
+}
+
+async function stopRt(){
+  if(callBusy) return;
+  callBusy = true; syncCallButtons();
+  stopRtPoll();
+  try{
+    const response=await fetch('/api/rt/stop',{method:'POST'});
+    const result=await response.json();
+    if(!response.ok || !result.ok) throw Error('结束通话失败');
+  }catch(e){
+    callBusy=false; syncCallButtons(); startRtPoll();
+    toast('未确认挂断，请重试',true); return;
+  }
+  rtRunning = false;
+  $('rtOn').checked = false; $('btnTalk').disabled = false;
+  $('rtState').textContent = ''; $('talkHint').textContent = TALK_IDLE;
+  $('rtState').textContent = '通话已结束';
+  callBusy = false; syncCallButtons();
+  toast('实时通话已结束');
+}
+
+function startRtPoll(){ if(rtTimer) return; rtTimer = setInterval(rtTick, 450); rtTick(); }
+function stopRtPoll(){ clearInterval(rtTimer); rtTimer = null; }
+
+async function rtTick(){
+  try{
+    const r = await fetch('/api/rt/status').then(r=>r.json());
+    if(!r.running){
+      if(rtRunning){
+        rtRunning = false; stopRtPoll(); $('rtOn').checked = false; $('btnTalk').disabled = false;
+        $('talkHint').textContent = TALK_IDLE;
+        if(r.phase === 'error' && r.error) toast('实时通话断开：'+r.error, true);
+      }
+      $('rtState').textContent = r.phase === 'error' ? ('出错：'+(r.error||'')) : '未通话';
+      $('rtState').style.color = r.phase === 'error' ? 'var(--bad)' : 'var(--dim)';
+      if(!callBusy){rtRunning=false; syncCallButtons();}
+      return;
+    }
+    rtRunning = true;
+    syncCallButtons();
+    $('rtOn').checked = true;
+    $('btnTalk').disabled = true;
+    $('rtState').textContent = (r.vision_pending ? '正在看当前画面' : (RT_LABEL[r.phase]||r.phase)) + (r.partial ? ('「'+r.partial+'」') : '');
+    if(r.vision_error) $('rtState').textContent += ' · '+r.vision_error;
+    $('rtState').style.color = r.phase === 'speaking' ? 'var(--ok)' : 'var(--dim)';
+    if(Array.isArray(r.history)) renderChat(r.history);
+    $('micMeter').textContent = '实时电平 '+(r.rms_db ?? -99)+' dB · 上行 '+(r.sent_kb||0)
+      +' KB · 已播 '+(r.played_kb||0)+' KB · '+(r.seconds||0)+' 秒';
+    $('talkHint').textContent = r.phase==='speaking' ? (r.barge_in ? '小豆在说…（你开口就能打断）' : '小豆在说…')
+      : (r.phase==='thinking' ? '小豆在想…' : '在听，直接说话就行');
+  }catch(e){}
+}
+
+// Page reloads must preserve the server-owned call; the call toggle ends it explicitly.
+
+// ---------- 小豆小豆 唤醒 ----------
+const WAKE_LABEL = {off:'已关闭', waiting:'在听，喊「小豆小豆」', awake:'我在',
+                    listening:'正在听你说话', thinking:'小豆在想…', speaking:'小豆在说', error:'出错' };
+let wakeTimer = null;
+
+function startWakePoll(){
+  if(wakeTimer) return;
+  wakeTimer = setInterval(async ()=>{
+    try{
+      const r = await fetch('/api/voice/state').then(r=>r.json());
+      $('wakeState').textContent = WAKE_LABEL[r.phase] || r.phase;
+      $('wakeState').style.color = r.phase==='error' ? 'var(--bad)' : (r.phase==='waiting'?'var(--dim)':'var(--ok)');
+      if(r.phase==='error' && r.detail) $('wakeState').textContent = '出错：'+r.detail;
+      if(r.phase==='waiting' && r.last_timings && r.last_timings.total){
+        $('wakeState').textContent += ' · 上一轮 '+r.last_timings.total+' 秒';
+      }
+      if(Array.isArray(r.history)) renderChat(r.history);
+      if(typeof r.rms_db === 'number'){
+        const th = r.threshold_db || -48;
+        const loud = r.rms_db >= th;
+        $('micMeter').textContent = '人声电平 ' + r.rms_db.toFixed(0) + ' dB · 环境底噪 '
+          + (r.noise_db ?? -60).toFixed(0) + ' dB · 门槛 ' + th + ' dB'
+          + (r.mic ? '（'+r.mic+'）' : '')
+          + (r.enabled ? (loud ? ' · 听到了' : ' · 偏小/环境音') : ' · 未开启');
+        $('micMeter').style.color = loud ? 'var(--ok)' : 'var(--dim)';
+      }
+    }catch(e){}
+  }, 900);
+}
+function stopWakePoll(){ clearInterval(wakeTimer); wakeTimer = null; $('wakeState').textContent=''; }
+
+async function setWake(on){
+  try{
+    const r = await fetch('/api/voice/wake',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({enabled:on})}).then(r=>r.json());
+    if(!r.ok) throw new Error(r.error||'切换失败');
+    await fetch('/api/config',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({wake_enabled:on})});
+    if(on){ startWakePoll(); toast('已开启：喊「小豆小豆」，听到了再说问题'); }
+    else { stopWakePoll(); toast('已关闭唤醒'); }
+  }catch(e){ toast(String(e.message||e), true); $('wakeOn').checked = !on; }
+}
+
+// ---------- 摄像头物理按键 ----------
+const ACTIONS = {check:'拍照批改', ask:'开启小豆对话', rest:'提醒休息', none:'不绑定'};
+let evtCursor = 0, hidSeen = [];
+
+async function pollEvents(){
+  try{
+    const r = await fetch('/api/events?after='+evtCursor).then(r=>r.json());
+    evtCursor = r.last||0;
+    for(const e of (r.events||[])){
+      const key = e.page+':'+e.usage;
+      const act = (cfg.hid_map||{})[key];
+      if(act && act!=='none'){ executeAction(act); toast('按键 → '+(ACTIONS[act]||act)); }
+      else toast('检测到按键 '+key);
+      if(!hidSeen.find(x=>x.key===key)) hidSeen.unshift({key, ts:e.ts});
+      hidSeen = hidSeen.slice(0,5);
+      renderHid();
+    }
+  }catch(e){}
+}
+
+function renderHid(){
+  const box = $('hidEvents'); if(!box) return;
+  if(!hidSeen.length){ box.innerHTML = '<div class="hint">还没收到按键事件。若按了没反应，说明该摄像头按键不走 HID，需要用其它触发方式。</div>'; return; }
+  box.innerHTML = hidSeen.map(x=>{
+    const cur = (cfg.hid_map||{})[x.key]||'none';
+    const opts = Object.entries(ACTIONS).map(([k,v])=>'<option value="'+k+'"'+(k===cur?' selected':'')+'>'+v+'</option>').join('');
+    return '<div class="row" style="margin-bottom:6px"><code style="color:var(--brand)">'+esc(x.key)+'</code>'
+      + '<select style="flex:1" onchange="bindKey(\''+x.key+'\',this.value)">'+opts+'</select></div>';
+  }).join('');
+}
+
+async function bindKey(key, action){
+  const map = Object.assign({}, cfg.hid_map||{});
+  if(action==='none') delete map[key]; else map[key]=action;
+  await fetch('/api/config',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({hid_map:map})});
+  cfg.hid_map = map;
+  toast('已绑定 '+key+' → '+(ACTIONS[action]||'不绑定'));
+}
+
+function executeAction(act){
+  if(act==='check') return runCheck(null,'camera');
+  if(act==='ask'){ $('wakeOn').checked = true; setWake(true); return; }
+  if(act==='rest'){ fetch('/api/say',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:'先休息一下，起来活动活动，看看远处。'})}); return; }
+}
+
+try{ applyFit(localStorage.getItem('ksb_fit') !== '0'); }catch(e){ applyFit(true); }
+refresh(); setInterval(refresh, 5000);
+loadCfg().then(renderHid);
+startRtPoll();
+setInterval(pollEvents, 900);
+</script>
+</body>
+</html>

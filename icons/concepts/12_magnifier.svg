@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.4" y2="1">
+      <stop offset="0" stop-color="#ffb648"/><stop offset="0.55" stop-color="#ee8420"/><stop offset="1" stop-color="#a8410c"/>
+    </linearGradient>
+    <linearGradient id="pg" x1="0" y1="0" x2="0.35" y2="1">
+      <stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#f3e6d4"/>
+    </linearGradient>
+    <filter id="sh" x="-40%" y="-40%" width="180%" height="180%"><feDropShadow dx="0" dy="16" stdDeviation="18" flood-color="#5d1f04" flood-opacity="0.45"/></filter>
+    <clipPath id="sq"><rect x="100" y="100" width="824" height="824" rx="186"/></clipPath>
+  </defs>
+  <g clip-path="url(#sq)">
+    <rect x="100" y="100" width="824" height="824" fill="url(#bg)"/>
+    <ellipse cx="420" cy="280" rx="340" ry="220" fill="#fff4dc" opacity="0.3"/>
+    <g filter="url(#sh)"><rect x="286" y="300" width="452" height="430" rx="18" fill="url(#pg)" transform="rotate(-4 512 515)"/></g>
+    <g transform="rotate(-4 512 515)" stroke="#d3bda2" stroke-width="10" stroke-linecap="round" opacity="0.9">
+      <path d="M336 392 L 500 392"/><path d="M336 452 L 566 452"/><path d="M336 512 L 460 512"/><path d="M336 572 L 540 572"/><path d="M336 632 L 430 632"/>
+    </g>
+    <g filter="url(#sh)">
+      <path d="M660 596 L 786 722" stroke="#2b3243" stroke-width="58" stroke-linecap="round"/>
+      <path d="M660 596 L 786 722" stroke="#4a5468" stroke-width="30" stroke-linecap="round"/>
+      <circle cx="556" cy="492" r="152" fill="#2b3243"/>
+      <circle cx="556" cy="492" r="132" fill="#fdf6ea"/>
+      <circle cx="556" cy="492" r="132" fill="none" stroke="#c9b39a" stroke-width="4"/>
+    </g>
+    <g>
+      <path d="M492 468 L 600 468" stroke="#b9a488" stroke-width="16" stroke-linecap="round"/>
+      <path d="M492 520 L 620 520" stroke="#b9a488" stroke-width="16" stroke-linecap="round"/>
+      <path d="M508 574 L 552 618 L 616 548" fill="none" stroke="#2aa76f" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+    <rect x="100" y="100" width="824" height="824" rx="186" fill="none" stroke="#ffffff" stroke-opacity="0.16" stroke-width="3"/>
+  </g>
+</svg>
